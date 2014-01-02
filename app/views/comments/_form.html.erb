@@ -1,7 +1,11 @@
 <%= form_for( [@post, @post.comments.build] ) do |f| %>
 	<p>
 		<%= f.label :commenter %><br>
-		<%= f.text_field :commenter %><br>
+		<% if current_user %>
+			<%= f.text_field :commenter, :value => current_user.username %><br>
+		<% else %>
+			<%= f.text_field :commenter %><br>
+		<% end %>
 	</p>
 
 	<p>

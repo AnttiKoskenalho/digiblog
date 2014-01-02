@@ -15,5 +15,15 @@
 </p>
 
 <p>
-	<%= link_to 'Destroy Comment', [comment.post, comment], method: :delete, data: { confirm: 'Are you sure?'} %>
+	<strong>
+		At:
+	</strong>
+	
+	<%= comment.created_at %>
 </p>
+
+<% if admin_rights %>
+	<p>
+		<%= link_to 'Destroy Comment', [comment.post, comment], method: :delete, data: { confirm: 'Are you sure?'} %>
+	</p>
+<% end %>

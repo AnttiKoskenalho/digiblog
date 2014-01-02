@@ -1,21 +1,27 @@
 class PostsController < ApplicationController
-	http_basic_authenticate_with name: "pikku", password: "hukka", except: [:index, :show]
-
 	def index
 		@posts = Post.all
 	end
 	
 	def new
-		@post = Post.new
+		if admin_rights
+			@post = Post.new
+		else
+			redirect_to root_url
+		end
 	end
 	
 	def create
-		@post = Post.new( post_params )
-		
-		if @post.save
-			redirect_to @post
+		if admin_rights
+			@post = Post.new( post_params )
+			
+			if @post.save
+				redirect_to @post
+			else
+				render 'new'
+			end
 		else
-			render 'new'
+			redirect_to root_url
 		end
 	end
 	
@@ -24,24 +30,36 @@ class PostsController < ApplicationController
 	end
 	
 	def edit
-		@post = Post.find( params[:id] )
+		if admin_rights
+			@post = Post.find( params[:id] )
+		else
+			redirect_to root_url
+		end
 	end
 	
 	def update
-		@post = Post.find( params[:id] )
-		
-		if @post.update( post_params )
-			redirect_to @post
+		if admin_rights
+			@post = Post.find( params[:id] )
+			
+			if @post.update( post_params )
+				redirect_to @post
+			else
+				render 'edit'
+			end
 		else
-			render 'edit'
+			redirect_to root_url
 		end
 	end
 	
 	def destroy
-		@post = Post.find( params[:id] )
-		@post.destroy
-		
-		redirect_to posts_path
+		if admin_rights
+			@post = Post.find( params[:id] )
+			@post.destroy
+			
+			redirect_to posts_path
+		else
+			redirect_to root_url
+		end
 	end
 	
 	private

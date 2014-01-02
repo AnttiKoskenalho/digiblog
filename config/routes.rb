@@ -1,8 +1,12 @@
 Blog::Application.routes.draw do
-  get "sessions/new"
-  get "users/new"
-  get "user/new"
-  scope "/blog/" do
+	scope "/blog/" do
+		get "log_in" => "sessions#new", :as => "log_in"
+		get "log_out" => "sessions#destroy", :as => "log_out"
+		get "sign_up" => "users#new", :as => "sign_up"
+		
+		resources :users
+		resources :sessions
+
 		resources :posts do
 			resources :comments
 		end

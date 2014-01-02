@@ -1,5 +1,4 @@
 class CommentsController < ApplicationController
-	http_basic_authenticate_with name: "pikku", password: "hukka", only: [:destory]
 	def create
 		@post = Post.find( params[ :post_id ] )
 		@comment = @post.comments.create( params[ :comment ].permit( :commenter, :body ) )
@@ -7,9 +6,13 @@ class CommentsController < ApplicationController
 	end
 	
 	def destroy
-		@post = Post.find( params[ :post_id ] )
-		@comment = @post.comments.find( params[ :id ] )
-		@comment.destroy
-		redirect_to post_path( @post )
+		if admin_rights
+			@post = Post.find( params[ :post_id ] )
+			@comment = @post.comments.find( params[ :id ] )
+			@comment.destroy
+			redirect_to post_path( @post )
+		else
+			redirect_to root_url
+		end
 	end
 end

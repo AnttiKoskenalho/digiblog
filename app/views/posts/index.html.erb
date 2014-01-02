@@ -2,7 +2,11 @@
 	Listing posts
 </h1>
 
-<%= link_to 'New post', new_post_path %>
+<% if admin_rights %>
+	<p>
+		<%= link_to 'New post', new_post_path %>
+	</p>
+<% end %>
 
 <table>
 	<tr>
@@ -30,15 +34,18 @@
 				<%= link_to 'Show', post %>
 			</td>
 
-			<td>
-				<%= link_to 'Edit', edit_post_path( post ) %>
-			</td>
+			<% if admin_rights %>
+				<td>
+					<%= link_to 'Edit', edit_post_path( post ) %>
+				</td>
+			<% end %>
 
-			<td>
-				<%= link_to 'Destroy', post_path( post ), method: :delete, 
-					data: { confirm: 'Are you sure?'} %>
-			</td>
-			
+			<% if admin_rights %>
+				<td>
+					<%= link_to 'Destroy', post_path( post ), method: :delete, 
+						data: { confirm: 'Are you sure?'} %>
+				</td>
+			<% end %>
 		</tr>
 	<% end %>
 </table>
